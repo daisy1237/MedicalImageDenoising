@@ -1,5 +1,6 @@
 # Medical datasets
-data/DRIVE/
+data/DRIVE/testing
+data/DRIVE/training
 data/CHASE_DB1/
 
 # Python
