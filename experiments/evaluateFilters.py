@@ -3,6 +3,7 @@ import csv
 import sys
 from pathlib import Path
 import cv2
+from PIL import Image
 import numpy as np
 projRoot = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(projRoot))
@@ -12,6 +13,7 @@ from src.metrics import evaluateImage
 
 trainingDir = projRoot / "data" / "DRIVE" / "training"
 imagesDir = trainingDir / "images"
+fovMasksDir = trainingDir / "mask"
 resultsDir = projRoot / "results"
 noiseLevels = [10, 20, 30]
 randomSeed = 42
@@ -31,7 +33,7 @@ def applyFilters(noisyImage):
         "non local means": nonLocalMeansFilter(noisyImage)
     }
 
-def run_experiments():
+def runExperiments():
     resultsDir.mkdir(parents=True, exist_ok=True)
 
     imagePaths = sorted(imagesDir.glob("*.tif"))
@@ -46,8 +48,15 @@ def run_experiments():
     for imagePath in imagePaths:
         original = loadImage(imagePath)
 
+        imageId = imagePath.stem.split("_")[0]
+        maskPath = fovMasksDir / f"{imageId}_training_mask.gif"
+
+        if not maskPath.exists():
+            raise FileNotFoundError(f"Missing FOV mask: {maskPath}")
+
+        fovMask = np.array(Image.open(maskPath).convert("L"))
+
         for sigma in noiseLevels:
-            # Use a reproducible noise realization for each image
             seed = randomSeed + int(imagePath.stem.split("_")[0]) * 100 + sigma
 
             noisyImage = addNoise(original, sigma=sigma, seed=seed)
@@ -55,7 +64,7 @@ def run_experiments():
             filteredImages = applyFilters(noisyImage)
 
             for method, processed in filteredImages.items():
-                metrics = evaluateImage(original, processed)
+                metrics = evaluateImage(original, processed, fovMask)
                 results.append({
                     "image": imagePath.name,
                     "sigma": sigma,

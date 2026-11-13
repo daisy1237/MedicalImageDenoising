@@ -3,4 +3,4 @@ from experiments import evaluateFilters
 
 if __name__ == "__main__":
     #viewImage.visualizeSample("21")
-    evaluateFilters.run_experiments()
+    evaluateFilters.runExperiments()
