@@ -1,9 +1,5 @@
-from src import viewImage
-from experiments import evaluateFilters,buildProbabilityMap,testSpatialNormalization,testAdaptiveFilter
+from experiments import visualizeAdaptiveV4
 
 if __name__ == "__main__":
-    #viewImage.visualizeSample("21")
-    #evaluateFilters.runExperiments()
-    #buildProbabilityMap.runProbMap()
-    #testSpatialNormalization.runNormaliztionTest()
-    testAdaptiveFilter.runAdaptiveTest(imageId=21,sigma=20,protectionStrength=0.7)
+    visualizeAdaptiveV4.visualizeAdaptiveV4(9, 30)
+    visualizeAdaptiveV4.visualizeAdaptiveV4(10, 30)

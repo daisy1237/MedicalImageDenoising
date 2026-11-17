@@ -1,7 +1,5 @@
 # Medical datasets
-data/DRIVE/testing
-data/DRIVE/training
-data/CHASE_DB1/
+data/
 
 # Python
 .venv/

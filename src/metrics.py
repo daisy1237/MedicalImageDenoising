@@ -98,3 +98,54 @@ def calculateMaskedSsim(original, processed, mask):
     validPixels = mask > 0
 
     return float(np.mean(ssimMap[validPixels]))
+
+
+import cv2
+import numpy as np
+
+
+"""
+    mean absolute error inside a region
+"""
+def maskedMAE(reference, filtered, mask):
+    if not np.any(mask):
+        return float("nan")
+
+    return float(np.mean(
+        np.abs(reference[mask] - filtered[mask])
+    ))
+
+
+"""
+    gradient preservation error inside a region
+    lower values indicate closer gradients
+"""
+def gradientError(reference, filtered, mask):
+    if not np.any(mask):
+        return float("nan")
+
+    reference = reference.astype(np.float32)
+    filtered = filtered.astype(np.float32)
+
+    refX = cv2.Sobel(
+        reference, cv2.CV_32F, 1, 0, ksize=3
+    )
+    refY = cv2.Sobel(
+        reference, cv2.CV_32F, 0, 1, ksize=3
+    )
+
+    outX = cv2.Sobel(
+        filtered, cv2.CV_32F, 1, 0, ksize=3
+    )
+    outY = cv2.Sobel(
+        filtered, cv2.CV_32F, 0, 1, ksize=3
+    )
+
+    refMagnitude = cv2.magnitude(refX, refY)
+    outMagnitude = cv2.magnitude(outX, outY)
+
+    return float(np.mean(
+        np.abs(
+            refMagnitude[mask] - outMagnitude[mask]
+        )
+    ))
