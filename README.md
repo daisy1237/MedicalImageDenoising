@@ -82,3 +82,31 @@ Results and figures are saved in the `results/` directory.
 The experiments suggest that anatomical probability maps can improve the preservation of fine retinal structures during image denoising.
 
 The improvements are relatively small, and further validation on independent datasets and
+
+## Dataset References
+
+### Duke OCT Dataset
+
+Chiu, S. J., Allingham, M. J., Mettu, P. S., Cousins, S. W., Izatt, J. A., & Farsiu, S. (2015). *Kernel regression based segmentation of optical coherence tomography images with diabetic macular edema*. Biomedical Optics Express, 6(4), 1172–1194.
+
+- [Dataset – Duke VIP Laboratory](https://people.duke.edu/~sf59/Chiu_BOE_2015_dataset.htm)
+- [Publication](https://doi.org/10.1364/BOE.6.001172)
+
+### DRIVE Dataset
+
+Staal, J., Abràmoff, M. D., Niemeijer, M., Viergever, M. A., & van Ginneken, B. (2004). *Ridge-based vessel segmentation in color images of the retina*. IEEE Transactions on Medical Imaging, 23(4), 501–509.
+
+- [DRIVE Dataset](https://drive.grand-challenge.org/)
+- [Publication](https://doi.org/10.1109/TMI.2004.825627)
+
+### RITE Annotations
+
+Hu, Q., Abràmoff, M. D., & Garvin, M. K. (2015). *Automated separation of binary overlapping trees in low-contrast color retinal images*. Medical Image Analysis, 21(1), 1–13.
+
+- [Publication](https://doi.org/10.1016/j.media.2014.12.006)
+
+### Dataset Usage
+
+The datasets are used for academic research and educational purposes. Original medical images and annotations are not included in this repository.
+
+The Duke OCT dataset prohibits redistribution and commercialization. Users should consult the original dataset sources for applicable usage conditions.
