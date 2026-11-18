@@ -1,9 +1,11 @@
 from experiments import analyzeFinalVariability,testDriveAlignment,testDriveRegistration,tuneDriveAlpha
-from src import viewImage,driveAlignment
+from src import viewImage,driveAlignment,viewOct
 from experiments import buildProbabilityMap,evaluateDriveProbabilityMap,evaluateDriveAdaptive
 
 if __name__ == "__main__":
     #buildProbabilityMap.buildDriveProbabilityMaps()
-    evaluateDriveAdaptive.evaluateDriveAdaptive()
+    #evaluateDriveAdaptive.evaluateDriveAdaptive()
     #testDriveAlignment.selectOpticDiscCenters()
     #turnDriveAlpha.tuneAlpha()
+    viewImage.visualizeSample(24)
+    #viewOct.visualizeOCT()

@@ -63,14 +63,14 @@ def visualizeSample(imageId):
             f"{metrics['ssim']:<10.4f}"
         )
 
-    fig, axes = plt.subplots(2, 3, figsize=(15, 9))
+    fig, axes = plt.subplots(2, 2, figsize=(15, 9))
 
     images = [
         (image, "original image"),
-        (noisyImage, "gaussian noise (sigma=20)"),
-        (gaussianImage, "gaussian filter"),
-        (bilateralImage, "bilateral filter"),
-        (nlmImage, "non local means"),
+        #(noisyImage, "gaussian noise (sigma=20)"),
+        #(gaussianImage, "gaussian filter"),
+        #(bilateralImage, "bilateral filter"),
+        #(nlmImage, "non local means"),
         (vesselMask, "vessel segmentation")
     ]
 
