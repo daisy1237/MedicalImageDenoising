@@ -1,110 +1,143 @@
 
-import sys
 from pathlib import Path
 
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
 
-projRoot = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(projRoot))
-
-from src.probabilityMap import buildProbabilityMap
-
-
-trainingDir = (
-    projRoot / "data" / "DRIVE"
-    / "training"
+from src.viewImage import (
+    loadImage,
+    loadMask,
+    imgDir,
+    manualMasks,
+    masks
 )
 
-vesselMaskDir = trainingDir / "1st_manual"
-fovMaskDir= trainingDir / "mask"
+from src.driveAlignment import (
+    getOpticDiscCenter,
+    alignDriveImage
+)
 
-resultsDir = projRoot / "results"
 
-"""
-    load a binary segmentation mask from a gif file
-    args:
-        path: path to the mask file
-    returns:
-        boolean numpy array
-"""
-def loadBinaryMask(path):
-    with Image.open(path) as image:
-        return np.array(image.convert("L")) > 0
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+RESULTS_DIR = PROJECT_ROOT / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
-"""
-    load vessel segmentation masks and corresponding fov masks
-    returns:
-        tuple containing vessel masks and valid region masks
-"""
-def loadDriveMasks():
-    vesselMasks = []
-    validMasks = []
+SMOOTH_SIGMA = 12
 
-    maskPaths = sorted(vesselMaskDir.glob("*_manual1.gif"))
 
-    if not maskPaths:
-        raise FileNotFoundError("No DRIVE vessel masks found.")
+def buildDriveProbabilityMaps():
+    imageFiles = sorted(imgDir.glob("*_training.tif"))
 
-    for mask_path in maskPaths:
-        image_id = mask_path.stem.split("_")[0]
+    vesselSum = None
+    validCount = None
 
-        fov_path = (
-            fovMaskDir / f"{image_id}_training_mask.gif"
+    for imagePath in imageFiles:
+        imageId = imagePath.stem.split("_")[0]
+
+        image = loadImage(imagePath)
+
+        vesselMask = loadMask(
+            manualMasks / f"{imageId}_manual1.gif"
         )
 
-        if not fov_path.exists():
-            raise FileNotFoundError(
-                f"Missing FOV mask: {fov_path}"
-            )
+        fovMask = loadMask(
+            masks / f"{imageId}_training_mask.gif"
+        )
 
-        vesselMasks.append(loadBinaryMask(mask_path))
-        validMasks.append(loadBinaryMask(fov_path))
+        discCenter = getOpticDiscCenter(
+            image, fovMask, imageId
+        )
 
-    return vesselMasks, validMasks
+        _, alignedVessels, alignedFov = alignDriveImage(
+            image,
+            vesselMask,
+            fovMask,
+            discCenter
+        )
 
-"""
-    build, save and visualize the statistical vessel probability map
-"""
-def runProbMap():
-    resultsDir.mkdir(parents=True, exist_ok=True)
+        vesselBinary = (alignedVessels > 0).astype(np.float32)
+        validBinary = (alignedFov > 0).astype(np.float32)
 
-    vessel_masks, valid_masks = loadDriveMasks()
+        if vesselSum is None:
+            vesselSum = np.zeros_like(vesselBinary)
+            validCount = np.zeros_like(validBinary)
 
-    probability_map = buildProbabilityMap(vessel_masks, valid_masks)
+        vesselSum += vesselBinary * validBinary
+        validCount += validBinary
+
+        print(f"Processed image {imageId}")
+
+    # Direct probability map
+    directMap = vesselSum / np.maximum(validCount, 1)
+
+    # Smooth both numerator and denominator to account
+    # for anatomical variability and missing FOV support.
+    smoothVesselSum = cv2.GaussianBlur(
+        vesselSum,
+        (0, 0),
+        SMOOTH_SIGMA
+    )
+
+    smoothValidCount = cv2.GaussianBlur(
+        validCount,
+        (0, 0),
+        SMOOTH_SIGMA
+    )
+
+    smoothedMap = smoothVesselSum / np.maximum(
+        smoothValidCount, 1e-6
+    )
+
+    smoothedMap[validCount == 0] = 0
+
+    directMap = np.clip(directMap, 0, 1)
+    smoothedMap = np.clip(smoothedMap, 0, 1)
 
     np.save(
-        resultsDir / "vessel_probability_map.npy",
-        probability_map
+        RESULTS_DIR / "drive_probability_direct.npy",
+        directMap
     )
 
-    print("\n===== VESSEL PROBABILITY MAP =====")
-    print(f"number of masks: {len(vessel_masks)}")
-    print(f"map shape: {probability_map.shape}")
-    print(f"minimum: {probability_map.min():.4f}")
-    print(f"maximum: {probability_map.max():.4f}")
-    print(f"mean: {probability_map.mean():.4f}")
-
-    plt.figure(figsize=(8, 7))
-
-    plt.imshow(
-        probability_map,
-        cmap="hot",
-        vmin=0,
-        vmax=1
+    np.save(
+        RESULTS_DIR / "drive_probability_smoothed.npy",
+        smoothedMap
     )
 
-    plt.colorbar(label="Vessel probability")
-    plt.title("Statistical Vessel Probability Map")
-    plt.axis("off")
+    np.save(
+        RESULTS_DIR / "drive_valid_count.npy",
+        validCount
+    )
+
+    print("\n===== PROBABILITY MAP STATISTICS =====")
+
+    validPixels = validCount > 0
+
+    for name, probabilityMap in [
+        ("Direct", directMap),
+        ("Smoothed", smoothedMap)
+    ]:
+        values = probabilityMap[validPixels]
+
+        print(f"\n{name} map:")
+        print(f"  Min: {values.min():.4f}")
+        print(f"  Max: {values.max():.4f}")
+        print(f"  Mean: {values.mean():.4f}")
+        print(f"  Median: {np.median(values):.4f}")
+
+    fig, axes = plt.subplots(1, 3, figsize=(16, 5))
+
+    axes[0].imshow(directMap, cmap="hot", vmin=0, vmax=1)
+    axes[0].set_title("Direct Vessel Probability")
+
+    axes[1].imshow(smoothedMap, cmap="hot", vmin=0, vmax=1)
+    axes[1].set_title("Smoothed Vessel Probability")
+
+    axes[2].imshow(validCount, cmap="viridis")
+    axes[2].set_title("Valid Pixel Count")
+
+    for ax in axes:
+        ax.axis("off")
+
     plt.tight_layout()
-
-    plt.savefig(
-        resultsDir / "vessel_probability_map.png",
-        dpi=300
-    )
-
     plt.show()
-
-
