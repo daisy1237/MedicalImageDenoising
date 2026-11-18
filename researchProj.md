@@ -146,9 +146,9 @@ Pentru evaluarea metodei propuse au fost selectate seturi de date medicale care 
 
 ### Setul de date DRIVE
 
-DRIVE (Digital Retinal Images for Vessel Extraction) contine imagini retiniene de fund de ochi si adnotari ale vaselor sanguine. Setul este utilizat frecvent in cercetari privind segmentarea vasculara, fiind relevant si pentru analiza conservarii vaselor fine.
+DRIVE (Digital Retinal Images for Vessel Extraction) [16] contine imagini retiniene de fund de ochi si adnotari ale vaselor sanguine. Setul este utilizat frecvent in cercetari privind segmentarea vasculara, fiind relevant si pentru analiza conservarii vaselor fine.
 
-In cadrul proiectului sunt utilizate cele 20 de imagini de antrenare pentru construirea hartii probabilistice si cele 20 de imagini de test pentru evaluarea metodei. Pregatirea imaginilor presupune identificarea regiunii retiniene valide, utilizarea mastilor vasculare si alinierea imaginilor pe baza pozitiei discului optic. Aceasta aliniere este necesara deoarece pozitia si orientarea structurilor anatomice variaza intre imagini.
+In cadrul proiectului sunt utilizate cele 20 de imagini de antrenare pentru construirea hartii probabilistice si cele 20 de imagini de test pentru evaluarea metodei. Pregatirea imaginilor presupune identificarea regiunii retiniene valide, utilizarea mastilor vasculare si alinierea imaginilor pe baza pozitiei discului optic. Aceasta aliniere este necesara deoarece pozitia si orientarea structurilor anatomice variaza intre imagini. Pentru analiza structurilor vasculare au fost luate in considerare si adnotarile RITE [18], utilizate in cercetari privind segmentarea si analiza vaselor retiniene.
 
 Pentru construirea hartii statistice sunt utilizate doar regiunile valide ale imaginilor. Astfel, probabilitatea este calculata tinand cont de numarul de observatii disponibile in fiecare pozitie, evitand influenta regiunilor din afara campului vizual. Au fost construite doua variante ale hartii: una directa, obtinuta prin agregarea mastilor, si una netezita, destinata reducerii efectelor variabilitatii anatomice si ale erorilor mici de aliniere.
 
@@ -158,7 +158,7 @@ Pentru construirea hartii statistice sunt utilizate doar regiunile valide ale im
 
 ### Setul de date OCT
 
-Pentru analiza structurilor stratificate ale retinei este utilizat setul de date OCT 2015_BOE_Chiu, care contine imagini OCT si adnotari manuale ale limitelor dintre straturile retiniene. In cadrul experimentelor sunt analizate in special structurile asociate stratului OPL. Pornind de la limitele anatomice adnotate, sunt construite masti care identifica regiunea de interes. 
+Pentru analiza structurilor stratificate ale retinei este utilizat setul de date OCT 2015_BOE_Chiu [17], care contine imagini OCT si adnotari manuale ale limitelor dintre straturile retiniene. In cadrul experimentelor sunt analizate in special structurile asociate stratului OPL. Pornind de la limitele anatomice adnotate, sunt construite masti care identifica regiunea de interes. 
 
 Spre deosebire de imaginile de fund de ochi, imaginile OCT necesita o normalizare care sa tina cont de forma si curbura straturilor retiniene. In proiect au fost investigate atat aplatizarea imaginilor in raport cu o limita anatomica, cat si normalizarea bazata pe doua limite.
 
@@ -846,3 +846,14 @@ Variation for Low-Dose CT Reconstruction." Journal of Digital Imaging, 36, 458�
 [15] Yeoh, H., Hong, S. H., Ahn, C., Choi, J.-Y., Chae, H.-D., Yoo, H. J., & Kim, J. H. (2021).
 "Deep Learning Algorithm for Simultaneous Noise Reduction and Edge Sharpening in Low-Dose
 CT Images: A Pilot Study Using Lumbar Spine CT." Korean Journal of Radiology, 22(11), 1850–1857.
+
+[16] Staal, J., Abràmoff, M. D., Niemeijer, M., Viergever, M. A., & van Ginneken, B. (2004). Ridge-based vessel segmentation in color images of the retina. IEEE Transactions on Medical Imaging, 23(4), 501–509.
+Dataset: https://drive.grand-challenge.org/
+DOI: https://doi.org/10.1109/TMI.2004.825627
+
+[17] Chiu, S. J., Allingham, M. J., Mettu, P. S., Cousins, S. W., Izatt, J. A., & Farsiu, S. (2015). Kernel regression based segmentation of optical coherence tomography images with diabetic macular edema. Biomedical Optics Express, 6(4), 1172–1194.
+Dataset: https://people.duke.edu/~sf59/Chiu_BOE_2015_dataset.htm
+DOI: https://doi.org/10.1364/BOE.6.001172
+
+[18] Hu, Q., Abràmoff, M. D., & Garvin, M. K. (2015). Automated separation of binary overlapping trees in low-contrast color retinal images. Medical Image Analysis, 21(1), 1–13.
+DOI: https://doi.org/10.1016/j.media.2014.12.006

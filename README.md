@@ -8,6 +8,11 @@ The main idea is to build an anatomical probability map from annotated images an
 
 The implementation uses Python, OpenCV and NumPy, without neural networks.
 
+## Research project report
+
+A detailed research report, including the theoretical background, proposed methodology, experimental setup, results on DRIVE and OCT datasets, and comparative analysis, is available here:
+**[Read the research report](researchProj.md)**
+
 ## Datasets
 
 Two retinal imaging datasets were used:
