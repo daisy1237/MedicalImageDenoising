@@ -213,7 +213,9 @@ Totusi, transformarea nu garanteaza suprapunerea perfecta a tuturor straturilor 
 Dupa alinierea sau normalizarea imaginilor, mastile anatomice sunt utilizate pentru estimarea probabilitatii de aparitie a structurilor fine in fiecare pozitie spatiala. Principiul este asemanator celui utilizat in construirea atlaselor anatomice probabilistice [12], insa in aceasta cercetare rezultatul este folosit pentru ghidarea reducerii zgomotului.
 
 Considerăm un set de $N$ imagini, fiecare având o mască anatomică binară $M_i(x,y)$, definită prin:
+
 $$M_i(x,y) = \begin{cases} 1, & \text{dacă structura este prezentă} \\  0, & \text{în caz contrar} \end{cases}$$
+
 Deoarece nu toate pozițiile sunt valide în fiecare imagine, introducem și o mască de validitate $V_i(x,y)$.
 Harta probabilistică este calculată prin:
 $$P(x,y) = \frac{\sum_{i=1}^{N} M_i(x,y)V_i(x,y)}{\sum_{i=1}^{N} V_i(x,y)}$$
@@ -405,6 +407,7 @@ In total, evaluarea finala cuprinde 22 de sectiuni OCT valide pentru fiecare niv
 
 Fluxul de evaluare este prezentat in schema urmatoare:
 
+```text
 [Date de antrenare si adnotari]
        │
        ▼
@@ -423,6 +426,7 @@ Fluxul de evaluare este prezentat in schema urmatoare:
                                                                     │
                                                                     ▼
                                                          [Analiza comparativa si statistica]
+```
 
 Prin aplicarea tuturor metodelor asupra acelorasi imagini zgomotoase, diferentele obtinute pot fi atribuite mai usor strategiilor de filtrare, fara influenta unor conditii de testare diferite.
 
@@ -435,10 +439,11 @@ Aceasta distinctie este importanta deoarece o metoda poate obtine o calitate glo
 
 PSNR masoara diferenta dintre imaginea de referinta si imaginea filtrata, fiind exprimat in decibeli (dB).
 Pentru o imagine cu intensitati normalizate in intervalul $[0,1]$, metrica este definita prin:
+
 $$\text{PSNR} = 10 \log_{10} \left( \frac{1}{\text{MSE}} \right)$$
 unde $\text{MSE}$ reprezinta eroarea medie patratica:
 $$\text{MSE} = \frac{1}{N} \sum_{i=1}^{N} (I_i - \hat{I}_i)^2$$
-Unde:
+unde:
 * **$I_i$** — intensitatea pixelului din imaginea de referinta;
 * **$\hat{I}_i$** — intensitatea corespunzatoare din imaginea filtrata;
 * **$N$** — numarul total de pixeli din regiunea evaluata.
@@ -454,8 +459,9 @@ Pentru OCT este calculat PSNR in regiunea OPL, utilizand mastile obtinute din ad
 
 SSIM evalueaza similaritatea structurala dintre doua imagini, tinand cont de luminozitate, contrast si structura locala.
 Formula generala este definita prin:
+
 $$\text{SSIM}(x,y) = \frac{(2\mu_x\mu_y + C_1)(2\sigma_{xy} + C_2)}{(\mu_x^2 + \mu_y^2 + C_1)(\sigma_x^2 + \sigma_y^2 + C_2)}$$
-Unde:
+unde:
 * **$\mu_x, \mu_y$** — mediile locale ale imaginilor;
 * **$\sigma_x^2, \sigma_y^2$** — variantele locale;
 * **$\sigma_{xy}$** — covarianta dintre cele doua imagini;
@@ -467,8 +473,9 @@ SSIM a fost utilizat in etapa initiala de comparare a filtrelor conventionale. P
 ### Mean Absolute Error (MAE)
 
 MAE masoara diferenta absoluta medie dintre intensitatile imaginii originale si cele ale imaginii filtrate:
+
 $$\text{MAE} = \frac{1}{N} \sum_{i=1}^{N} \vert{}I_i - \hat{I}_i\vert{}$$
-Unde:
+unde:
 * **$I_i$** — intensitatea pixelului din imaginea originala;
 * **$\hat{I}_i$** — intensitatea corespunzatoare din imaginea filtrata;
 * **$N$** — numarul total de pixeli din regiunea evaluata.
@@ -478,12 +485,11 @@ Spre deosebire de PSNR, pentru MAE o valoare mai mica indica un rezultat mai bun
 ### Eroarea de gradient
 
 Pentru evaluarea conservarii contururilor este utilizata eroarea de gradient, calculata prin compararea variatiilor spatiale ale intensitatii din imaginea de referinta si imaginea filtrata.
-Gradientul unei imagini poate fi reprezentat prin:
-$$\nabla I = \left( \frac{\partial I}{\partial x}, \frac{\partial I}{\partial y} \right)$$
 
 Eroarea de gradient este calculata prin:
+
 $$E_{\nabla} = \frac{1}{\vert{}M\vert{}} \sum_{i \in M} \left\vert{} \nabla I_i - \nabla \hat{I}_i \right\vert{}_2$$
-Unde:
+unde:
 * **$\nabla I_i$** — gradientul din imaginea de referinta;
 * **$\nabla \hat{I}_i$** — gradientul corespunzator din imaginea filtrata;
 * **$M$** — regiunea de interes (iar $\vert{}M\vert{}$ reprezinta cardinalul/numarul de elemente al acesteia).
@@ -656,6 +662,7 @@ Pentru experimentele DRIVE au fost analizate diferentele dintre metoda Adaptive 
 
 Analiza a fost realizata pe cele 20 de imagini din setul de test, folosind diferente pereche intre rezultatele obtinute de metode pe aceleasi imagini.
 Pentru o metrica precum PSNR, imbunatatirea este definita prin:
+
 $$\Delta_i = \text{PSNR}_{\text{adaptiv},i} - \text{PSNR}_{\text{referinta},i}$$
 O valoare pozitiva indica un rezultat mai bun al metodei adaptive.
 
@@ -849,11 +856,8 @@ CT Images: A Pilot Study Using Lumbar Spine CT." Korean Journal of Radiology, 22
 
 [16] Staal, J., Abràmoff, M. D., Niemeijer, M., Viergever, M. A., & van Ginneken, B. (2004). Ridge-based vessel segmentation in color images of the retina. IEEE Transactions on Medical Imaging, 23(4), 501–509.
 Dataset: https://drive.grand-challenge.org/
-DOI: https://doi.org/10.1109/TMI.2004.825627
 
 [17] Chiu, S. J., Allingham, M. J., Mettu, P. S., Cousins, S. W., Izatt, J. A., & Farsiu, S. (2015). Kernel regression based segmentation of optical coherence tomography images with diabetic macular edema. Biomedical Optics Express, 6(4), 1172–1194.
 Dataset: https://people.duke.edu/~sf59/Chiu_BOE_2015_dataset.htm
-DOI: https://doi.org/10.1364/BOE.6.001172
 
 [18] Hu, Q., Abràmoff, M. D., & Garvin, M. K. (2015). Automated separation of binary overlapping trees in low-contrast color retinal images. Medical Image Analysis, 21(1), 1–13.
-DOI: https://doi.org/10.1016/j.media.2014.12.006
