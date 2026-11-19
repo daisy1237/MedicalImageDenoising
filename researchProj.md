@@ -353,12 +353,11 @@ Aceasta organizare permite repetarea experimentelor, modificarea parametrilor si
 
 Experimentele au fost realizate pe doua tipuri de imagini medicale: DRIVE, pentru analiza vaselor sanguine retiniene, si OCT, pentru analiza structurilor stratificate ale retinei.
 Pentru fiecare experiment, imaginile sunt pregatite si normalizate, dupa care este adaugat zgomot Gaussian sintetic. Metodele de filtrare sunt aplicate asupra aceleiasi imagini zgomotoase, iar rezultatele sunt comparate cu imaginea originala.
-Utilizarea zgomotului sintetic permite controlul intensitatii degradarii si calcularea unor metrici de calitate in raport cu o imagine de referinta cunoscuta.
 
 ### Configurarea experimentelor DRIVE
 
-Pentru imaginile DRIVE sunt utilizate cele 20 de imagini din setul de antrenare pentru construirea hartilor probabilistice si selectarea parametrilor. Evaluarea finala este realizata pe cele 20 de imagini din setul de test.
-Imaginile sunt aliniate in functie de pozitia discului optic si normalizate in intervalul de intensitate ([0,1]). Ulterior, este adaugat zgomot Gaussian cu abaterea standard (\sigma_n=0.08).
+Pentru DRIVE, cele 20 de imagini de antrenare au fost utilizate pentru construirea hartilor probabilistice si selectarea parametrilor, iar cele 20 de imagini de test pentru evaluarea finala.
+
 Sunt comparate urmatoarele variante:
 * Weak Gaussian – filtrare Gaussiana slaba, cu nucleu 3 x 3 si (sigma=0.6).
 * Strong Gaussian – filtrare Gaussiana puternica, cu nucleu 7 x 7 si (sigma=1.8).
@@ -367,14 +366,11 @@ Sunt comparate urmatoarele variante:
 * Adaptive Smoothed Tuned – varianta netezita, cu parametrul de protectie (alpha=0.5).
 * Noise-Aware Control – combinare a celor doua filtre folosind o pondere constanta, fara adaptare spatiala.
 
-Parametrul (\alpha) a fost selectat folosind imaginile de antrenare si o procedura leave-one-out, in care fiecare imagine este evaluata pe rand folosind o harta construita din celelalte imagini.
-Aceasta separare este importanta pentru evitarea utilizarii informatiilor din setul de test la configurarea metodei.
+Parametrul $\alpha$ a fost selectat pe datele de antrenare, prin procedura leave-one-out descrisa in sectiunea 4.6, fara utilizarea imaginilor de test.
 
 ### Configurarea experimentelor OCT
 
-Pentru imaginile OCT este utilizat setul 2015_BOE_Chiu, care contine imagini si adnotari ale limitelor dintre straturile retiniene.
-Imaginile sunt normalizate folosind doua limite anatomice, iar hartile probabilistice sunt construite din datele de antrenare. Evaluarea finala este realizata pe subiectii 9 si 10, care nu sunt utilizati pentru construirea hartii finale.
-Au fost investigate 3 niveluri de zgomot Gaussian (sigma in range {0.04, 0.08, 0.12}). Acestea permit evaluarea comportamentului metodei in conditii de degradare diferite.
+Pentru OCT, harta probabilistica finala a fost construita folosind subiectii 1–8, iar evaluarea a fost realizata pe subiectii 9 si 10, dupa normalizarea anatomica descrisa in sectiunea 4.4.
 
 In experimentele finale sunt comparate:
 * Weak Gaussian – filtrare slaba.
@@ -383,7 +379,7 @@ In experimentele finale sunt comparate:
 * Adaptive V4 – filtrare adaptiva care tine cont si de nivelul zgomotului.
 * Noise-Aware Control – combinare cu pondere constanta, ajustata in functie de nivelul zgomotului.
 
-Parametrul (k) al variantei V4 este configurat in functie de nivelul zgomotului. Valorile utilizate in evaluarea finala sunt prezentate in tabelul urmator:
+Parametrul $k$ al variantei V4 este configurat in functie de nivelul zgomotului. Valorile utilizate in evaluarea finala sunt prezentate in tabelul urmator:
 
 | Nivel zgomot | 	Parametrul (k) |
 |--------------|-----------------|
@@ -740,26 +736,15 @@ Trebuie mentionat ca cele 22 de sectiuni provin de la numai doi subiecti. Sectiu
 
 ### 5.6.3. Interpretarea comparativa a rezultatelor
 
-Experimentele DRIVE si OCT evidentiaza atat avantajele metodei propuse, cat si dependenta acesteia de caracteristicile imaginilor si de nivelul zgomotului.
+Experimentele DRIVE si OCT evidentiaza comportamente diferite ale filtrarii adaptive, in functie de caracteristicile anatomice ale imaginilor si de intensitatea zgomotului.
 
-In cazul DRIVE, metoda Adaptive Smoothed Tuned obtine imbunatatiri ale PSNR vascular fata de filtrarea Gaussiana puternica si fata de metoda de control.
-Rezultatele sunt relevante in special pentru vasele subtiri, unde imbunatatirea fata de Strong Gaussian este observata in 18 dintre cele 20 de imagini.
+In cazul DRIVE, metoda Adaptive Smoothed Tuned obtine imbunatatiri relativ mici, dar consistente, in special pentru vasele sanguine subtiri. In cazul OCT, avantajele variantei Adaptive V4 sunt mai pronuntate la zgomot redus si se diminueaza pe masura ce intensitatea zgomotului creste. Aceste diferente sugereaza ca eficienta adaptarii spatiale depinde atat de distributia structurilor anatomice, cat si de conditiile de degradare a imaginii.
 
-In cazul OCT, metoda Adaptive V4 obtine cele mai evidente avantaje in regiunea OPL la niveluri reduse si intermediare de zgomot. La zgomot ridicat, rezultatele sunt apropiate de cele ale metodei de control.
-Aceasta diferenta de comportament arata ca utilizarea hartilor probabilistice nu garanteaza imbunatatiri uniforme in toate conditiile experimentale.
+Un aspect comun celor doua experimente este importanta evaluarii separate a regiunilor anatomice de interes. Rezultatele arata ca optimizarea calitatii globale nu conduce intotdeauna la cea mai buna conservare a structurilor fine. Prin urmare, metricile calculate in regiunile vasculare si OPL ofera informatii suplimentare fata de PSNR global.
 
-Un alt aspect important este relatia dintre calitatea globala a imaginii si conservarea structurilor anatomice.
-In experimentele OCT, metoda cu cel mai bun PSNR global nu coincide intotdeauna cu metoda care obtine cel mai bun PSNR in regiunea OPL.
-Acest rezultat sustine necesitatea evaluarii separate a regiunilor anatomice de interes. O metoda poate obtine rezultate globale bune, dar poate modifica structurile fine pe care cercetarea urmareste sa le protejeze.
+Din punct de vedere metodologic, comparatiile cu Noise-Aware Control permit investigarea contributiei hartii probabilistice, independent de simpla combinare a doua filtre Gaussiene. Rezultatele indica un beneficiu al adaptarii spatiale in anumite conditii, fara ca acesta sa fie uniform pentru toate imaginile si nivelurile de zgomot.
 
-Din punct de vedere metodologic, avantajul principal al abordarii propuse este utilizarea informatiilor anatomice statistice pentru controlul spatial al filtrarii, fara necesitatea antrenarii unei retele neuronale.
-Totusi, comparatia cu cercetarile existente trebuie interpretata cu prudenta. Metodele prezentate in [1], [5], [9] si [13] investigheaza reducerea zgomotului in imagini CT, in timp ce [6] analizeaza filtrarea imaginilor retiniene.
-
-Rezultatele acestor lucrari nu pot fi comparate numeric direct cu cele obtinute in studiul nostru fara utilizarea acelorasi date, conditii de zgomot si protocoale de evaluare.
-Prin urmare, experimentele realizate nu demonstreaza superioritatea generala a metodei fata de toate abordarile existente, ci evidentiaza beneficiile utilizarii unei harti anatomice probabilistice in configuratiile experimentale analizate.
-
-In concluzie, rezultatele sustin partial ipoteza cercetarii: hartile statistice de probabilitate pot contribui la conservarea structurilor anatomice fine in timpul reducerii zgomotului, insa eficienta lor depinde de tipul structurilor analizate, de precizia alinierii anatomice si de intensitatea zgomotului.
-Aceste observatii justifica investigarea ulterioara a unor strategii adaptive mai robuste, capabile sa combine informatia anatomica statistica cu caracteristicile locale ale fiecarei imagini.
+Comparatia cu metodele existente in literatura ramane una conceptuala, deoarece studiile analizate utilizeaza seturi de date si protocoale experimentale diferite. Rezultatele obtinute evidentiaza potentialul utilizarii informatiilor anatomice statistice pentru ghidarea filtrarii, fara a demonstra superioritatea generala fata de alte metode de reducere a zgomotului.
 
 ## 5.7. Limitarile studiului 
 
