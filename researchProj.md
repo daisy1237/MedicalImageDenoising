@@ -34,11 +34,79 @@ Ipoteza cercetarii este ca integrarea informatiei anatomice probabilistice in pr
 
 ## 2.1. Caracteristicile imaginilor medicale si tipurile de zgomot
 
+Imaginile medicale reprezinta informatii despre structurile anatomice prin intermediul intensitatilor pixelilor, in cazul imaginilor bidimensionale, sau ale voxelilor, in cazul imaginilor tridimensionale.
+
+In functie de tehnologia de achizitie, imaginile pot prezenta diferite tipuri de zgomot [3]:
+
+- **Zgomot Gaussian** – variatii ale intensitatilor descrise printr-o distributie normala.
+- **Zgomot Poisson** – apare in procesele de achizitie bazate pe detectarea unui numar finit de fotoni, fiind dependent de intensitatea semnalului.
+- **Zgomot Rician** – specific imaginilor de magnitudine obtinute prin rezonanta magnetica (RMN).
+- **Zgomot Speckle** – apare in tehnicile de imagistica bazate pe interferenta coerenta, precum OCT si ecografia.
+
+In cadrul cercetarii este utilizat zgomot Gaussian aditiv, caracterizat prin distributia:
+
+$$N(x,y) \sim \mathcal{N}(0,\sigma_n^2)$$
+
+unde $\sigma_n$ reprezinta deviatia standard a zgomotului. Alegerea acestui model permite controlarea nivelului de degradare si realizarea unor experimente reproductibile.
+
 ## 2.2. Metode clasice de reducere a zgomotului
+
+Metodele clasice de reducere a zgomotului utilizeaza proprietatile spatiale si de intensitate ale imaginilor. In cadrul cercetarii sunt analizate trei metode principale [3].
+
+### Filtrarea Gaussiana
+
+Filtrarea Gaussiana calculeaza o medie ponderata a pixelilor vecini, utilizand un nucleu definit prin functia:
+
+$$G(x,y)=\frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}}$$
+
+Parametrul $\sigma$ controleaza intensitatea filtrarii. O valoare mai mare determina o netezire mai puternica, dar poate conduce la pierderea detaliilor si estomparea contururilor.
+
+### Filtrarea bilaterala
+
+Filtrarea bilaterala stabileste ponderea pixelilor vecini pe baza a doua criterii:
+
+- Distanta spatiala dintre pixeli.
+- Diferenta dintre intensitatile pixelilor.
+
+Astfel, pixelii cu intensitati foarte diferite contribuie mai putin la rezultatul filtrarii, permitand o conservare mai buna a contururilor [6].
+
+### Non-Local Means (NLM)
+
+Metoda Non-Local Means reduce zgomotul prin identificarea unor regiuni similare din imagine, nu doar prin analiza pixelilor aflati in vecinatatea imediata.
+
+Regiunile cu un grad ridicat de similaritate primesc ponderi mai mari in calculul intensitatii finale. Metoda poate conserva detaliile si texturile, dar prezinta un cost computational mai ridicat [8, 13].
 
 ## 2.3. Metode adaptive de reducere a zgomotului
 
+Spre deosebire de filtrarea cu parametri constanti, metodele adaptive ajusteaza procesul de filtrare in functie de caracteristicile imaginii.
+
+Adaptarea poate fi realizata pe baza:
+
+- Nivelului estimat al zgomotului
+- Variatiilor locale ale intensitatilor
+- Prezentei contururilor si texturilor
+- Informatiilor anatomice cunoscute anterior
+
+Principiul general consta in aplicarea unei filtrari mai puternice in regiunile omogene si a unei filtrari mai slabe in regiunile care contin detalii importante.
+
+Utilizarea informatiilor anterioare despre imagine [1] si adaptarea filtrarii la nivelul zgomotului [5] reprezinta doua directii relevante pentru abordarea propusa in aceasta cercetare.
+
 ## 2.4. Identificarea si conservarea structurilor anatomice fine
+
+Structurile anatomice fine sunt caracterizate prin dimensiuni reduse si, in anumite cazuri, printr-un contrast scazut fata de regiunile inconjuratoare. Din acest motiv, acestea pot fi dificil de diferentiat de zgomot.
+
+In cadrul cercetarii sunt analizate doua categorii de structuri:
+
+- Vasele de sange retiniene, in special vasele subtiri
+- Stratul retinian OPL (Outer Plexiform Layer), vizibil in imaginile OCT
+
+Identificarea acestor structuri poate fi realizata cu ajutorul mastilor anatomice binare, in care valoarea 1 indica prezenta structurii de interes, iar valoarea 0 indica absenta acesteia.
+
+Prin alinierea si agregarea mai multor masti anatomice se poate construi o harta statistica de probabilitate. Aceasta descrie frecventa de aparitie a unei structuri in fiecare pozitie spatiala, folosind un principiu similar celui utilizat in construirea atlaselor anatomice probabilistice [12].
+
+O astfel de harta permite diferentierea regiunilor in functie de probabilitatea prezentei structurilor de interes, fara a necesita cunoasterea localizarii exacte a acestora in fiecare imagine noua.
+
+Conservarea structurilor fine trebuie evaluata separat de calitatea globala a imaginii, deoarece reducerea eficienta a zgomotului la nivel global nu garanteaza si pastrarea detaliilor anatomice.
 
 # 3. Cercetari existente (related work)
 
@@ -804,7 +872,27 @@ In concluzie, rezultatele sustin potentialul abordarii propuse, dar sunt necesar
 
 ## 6.1. Concluziile cercetarii
 
+In cadrul acestei cercetari a fost dezvoltata si evaluata o metoda adaptiva de reducere a zgomotului din imaginile medicale, bazata pe utilizarea unei harti statistice de probabilitate anatomica.
+
+Experimentele realizate pe imaginile OCT si DRIVE au evidentiat potentialul utilizarii informatiei anatomice pentru conservarea structurilor fine. In cazul imaginilor OCT, performanta metodei variaza in functie de nivelul zgomotului, in timp ce pentru imaginile DRIVE au fost obtinute imbunatatiri reduse, dar relativ consistente la nivelul vaselor de sange.
+
+Rezultatele sustin partial ipoteza cercetarii, indicand faptul ca integrarea informatiei anatomice probabilistice poate contribui la conservarea detaliilor, fara a afecta semnificativ calitatea globala a imaginii. Totusi, rezultatele nu demonstreaza o superioritate generalizata fata de metodele clasice de filtrare.
+
+Principala contributie a lucrarii consta in dezvoltarea unei abordari interpretabile, bazate pe informatii anatomice si metode statistice, fara utilizarea retelelor neuronale.
+
 ## 6.2. Posibile imbunatatiri si dezvoltari ulterioare
+
+Metoda propusa poate fi imbunatatita si extinsa prin urmatoarele directii:
+
+- Utilizarea unor seturi de date mai mari si mai diverse
+- Imbunatatirea metodelor de aliniere si normalizare anatomica
+- Estimarea automata a nivelului de zgomot
+- Evaluarea metodei pentru alte tipuri de zgomot
+- Optimizarea parametrilor pe seturi de validare independente
+- Extinderea metodei la imagini medicale tridimensionale, precum CT si RMN
+- Construirea unor harti probabilistice pentru alte structuri anatomice fine
+
+Aceste directii pot contribui la cresterea robustetii metodei si la extinderea aplicabilitatii sale in domeniul procesarii imaginilor medicale.
 
 # Bibliografie
 
