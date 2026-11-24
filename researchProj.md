@@ -1,10 +1,34 @@
-# Abstract
+## Abstract
 
-# 1. Introducere 
+Aceasta lucrare propune o metoda adaptiva de reducere a zgomotului din imaginile medicale, avand ca obiectiv conservarea structurilor anatomice fine. Metoda utilizeaza o harta statistica de probabilitate anatomica pentru a ajusta spatial intensitatea filtrarii Gaussian, fara utilizarea retelelor neuronale.
+
+Evaluarea experimentala a fost realizata pe seturile de date Duke OCT si DRIVE, utilizand si adnotarile RITE, urmarind conservarea stratului retinian OPL si a vaselor de sange retiniene. Rezultatele indica imbunatatiri moderate fata de metodele de referinta, sustinand potentialul integrarii informatiei anatomice probabilistice in procesul de reducere adaptiva a zgomotului.
+
+**Cuvinte-cheie:** imagini medicale, reducerea zgomotului, filtrare adaptiva, harta de probabilitate anatomica.
+
+# 1. Introducere
 
 ## 1.1. Contextul si importanta cercetarii
 
+Imaginile medicale reprezinta un instrument important in identificarea si analiza structurilor anatomice. Prezenta zgomotului poate afecta calitatea acestora, ingreunand observarea detaliilor relevante.
+
+Metodele clasice de reducere a zgomotului aplica, in general, filtrarea uniform asupra imaginii, fara a tine cont de localizarea structurilor anatomice. Acest lucru poate conduce la estomparea unor structuri fine, precum vasele de sange sau straturile retiniene.
+
+Cercetarea propune utilizarea informatiei anatomice probabilistice pentru adaptarea spatiala a filtrarii, urmarind obtinerea unui echilibru intre reducerea zgomotului si conservarea detaliilor anatomice.
+
 ## 1.2. Obiectivele cercetarii
+
+Obiectivul principal al cercetarii este dezvoltarea si evaluarea unei metode adaptive de reducere a zgomotului, bazata pe distributia spatiala probabilistica a structurilor anatomice.
+
+Obiectivele specifice sunt:
+
+- Analiza metodelor clasice de reducere a zgomotului
+- Construirea unei harti statistice de probabilitate anatomica
+- Dezvoltarea unei metode de filtrare adaptiva bazate pe aceasta harta
+- Evaluarea metodei pe diferite tipuri de imagini medicale si niveluri de zgomot
+- Compararea performantelor cu metodele de referinta, atat la nivel global, cat si la nivelul structurilor anatomice de interes
+
+Ipoteza cercetarii este ca integrarea informatiei anatomice probabilistice in procesul de filtrare poate imbunatati conservarea structurilor fine, mentinand in acelasi timp o reducere eficienta a zgomotului.
 
 # 2. Fundamente teoretice
 
