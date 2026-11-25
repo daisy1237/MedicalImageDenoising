@@ -6,6 +6,18 @@ Evaluarea experimentala a fost realizata pe seturile de date Duke OCT si DRIVE, 
 
 **Cuvinte-cheie:** imagini medicale, reducerea zgomotului, filtrare adaptiva, harta de probabilitate anatomica.
 
+## Clasificare
+
+**ACM Computing Classification System (CCS 2012):**
+
+- Computing methodologies → Computer graphics → Image manipulation → Image processing
+
+**AMS Mathematics Subject Classification (MSC 2020):**
+
+- 68U10 – Computing methodologies for image processing
+- 92C55 – Biomedical imaging and signal processing
+- 94A08 – Image processing (compression, reconstruction, etc.)
+- 
 # 1. Introducere
 
 ## 1.1. Contextul si importanta cercetarii
@@ -29,6 +41,18 @@ Obiectivele specifice sunt:
 - Compararea performantelor cu metodele de referinta, atat la nivel global, cat si la nivelul structurilor anatomice de interes
 
 Ipoteza cercetarii este ca integrarea informatiei anatomice probabilistice in procesul de filtrare poate imbunatati conservarea structurilor fine, mentinand in acelasi timp o reducere eficienta a zgomotului.
+
+### 1.3. Intrebari de cercetare
+
+Cercetarea urmareste sa raspunda la urmatoarele intrebari:
+
+-  Poate utilizarea unei harti statistice de probabilitate anatomica sa imbunatateasca conservarea structurilor fine comparativ cu metodele clasice de filtrare?
+-  In ce masura informatia anatomica probabilistica contribuie la imbunatatirea rezultatelor fata de adaptarea filtrarii exclusiv la nivelul zgomotului?
+-  Poate fi aplicata metoda propusa pentru conservarea unor structuri anatomice diferite, in cadrul mai multor tipuri de imagini medicale?
+
+### 1.4. Structura lucrarii
+
+Capitolul 2 prezinta fundamentele teoretice, iar capitolul 3 analizeaza cercetarile existente in domeniu. Capitolul 4 descrie metoda propusa si modelul matematic al acesteia. Capitolul 5 prezinta implementarea, experimentele si analiza rezultatelor, iar capitolul 6 sintetizeaza concluziile si directiile viitoare de cercetare.
 
 # 2. Fundamente teoretice
 
@@ -879,6 +903,14 @@ Experimentele realizate pe imaginile OCT si DRIVE au evidentiat potentialul util
 Rezultatele sustin partial ipoteza cercetarii, indicand faptul ca integrarea informatiei anatomice probabilistice poate contribui la conservarea detaliilor, fara a afecta semnificativ calitatea globala a imaginii. Totusi, rezultatele nu demonstreaza o superioritate generalizata fata de metodele clasice de filtrare.
 
 Principala contributie a lucrarii consta in dezvoltarea unei abordari interpretabile, bazate pe informatii anatomice si metode statistice, fara utilizarea retelelor neuronale.
+
+### Raspunsuri la intrebarile de cercetare
+
+-  Utilizarea hartii probabilistice anatomice a permis obtinerea unor imbunatatiri in conservarea structurilor fine, comparativ cu metodele clasice de filtrare, in anumite conditii experimentale.
+
+-  Comparatia cu metoda Noise-Aware Control indica un potential avantaj al utilizarii informatiei anatomice probabilistice. Totusi, diferentele obtinute sunt reduse si necesita validari suplimentare pentru izolarea contributiei acestei informatii.
+
+-  Aplicarea metodei pe imaginile OCT si DRIVE demonstreaza posibilitatea adaptarii acesteia la diferite tipuri de imagini si structuri anatomice. Extinderea la alte modalitati de imagistica medicala necesita investigatii suplimentare.
 
 ## 6.2. Posibile imbunatatiri si dezvoltari ulterioare
 
