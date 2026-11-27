@@ -17,7 +17,27 @@ Evaluarea experimentala a fost realizata pe seturile de date Duke OCT si DRIVE, 
 - 68U10 – Computing methodologies for image processing
 - 92C55 – Biomedical imaging and signal processing
 - 94A08 – Image processing (compression, reconstruction, etc.)
-- 
+
+## Alegerea revistei stiintifice
+
+Revista aleasa pentru redactarea articolului este
+**Medical Image Analysis (MedIA)**, publicata de Elsevier.
+
+Alegerea acestei reviste este justificata prin relevanta
+domeniului sau de cercetare, care include procesarea
+imaginilor medicale, modelarea anatomica si dezvoltarea
+metodelor matematice si statistice de analiza a imaginilor.
+
+Metoda propusa in cadrul acestei lucrari se incadreaza
+in aceste directii prin utilizarea hartilor probabilistice
+anatomice si a filtrarii adaptive pentru conservarea
+structurilor anatomice fine.
+
+- ISSN: 1361-8415
+- Publisher: Elsevier
+- [Journal](https://www.sciencedirect.com/journal/medical-image-analysis)
+- [Guide for Authors](https://www.sciencedirect.com/journal/medical-image-analysis/publish/guide-for-authors)
+
 # 1. Introducere
 
 ## 1.1. Contextul si importanta cercetarii
